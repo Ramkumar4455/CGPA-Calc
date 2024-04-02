@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>CGPA</title>
+    <link rel="stylesheet" href="cgpa.css">
+    <link href='https://fonts.googleapis.com/css?family=Merienda' rel='stylesheet'>
+</head>
+
+<body>
+
+    <div class="header">
+        <p class="heading">CGPA CALCULATOR</p>
+    </div>
+
+    <div class="grid">
+
+        <div class="calculations">
+
+            <div class="sem_number">
+                Semester 1
+            </div>
+
+            <table class="table">
+                <tr>
+                    <th>S.No</th>
+                    <th>Course Name</th>
+                    <th>Credit</th>
+                    <th>Grade</th>
+                </tr>
+
+                <tr>
+                    <td>Course 1</td>
+                    <td><input type="text" placeholder="Course Name" class="input"></td>
+                    <td><input type="number" class="ans-input" min="0" step="0.5"></td>
+                    <td><select id="selectOption" class=" options">
+                            <option>O</option>
+                            <option>A+</option>
+                            <option>A</option>
+                            <option>B+</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>R</option>
+
+                        </select></td>
+                </tr>
+
+
+
+            </table>
+
+            <button class="add-course buttons">Add Course</button>
+            <button class="delete-course buttons">Delete Course</button>
+            <button class="calculate-gpa buttons">Calculate GPA</button>
+
+
+        </div>
+
+        <div class="details">
+            <div class="resultTable">
+                <table class="results">
+                    <tr>
+                        <th>Semester</th>
+                        <th>GPA</th>
+                    </tr>
+                    <tr>
+                        <td>Semester 1</td>
+                        <td class="finalResult">0</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+
+        let finalResult = document.querySelector('.finalResult');
+
+
+        let table = document.querySelector('.table')
+
+
+        let temp = `  <tr>
+                <th>S.No</th>
+                <th>Course Name</th>
+                <th>Credit</th>
+                <th>Grade</th>
+            </tr>
+
+            <tr>
+                <td>Course 1</td>
+                <td><input type="text" placeholder="Course Name" readonly class="input"></td>
+                <td><input type="number" class="ans-input"  min="0" step="0.5" minlength="50%"></td>
+                <td><select id="selectOption" class=" options" >
+                    <option>O</option>
+                    <option>A+</option>
+                    <option >A</option>
+                    <option >B+</option>
+                    <option >B</option>
+                    <option >C</option>
+                    <option >R</option>
+                 
+                </select></td>
+            </tr>
+`;
+
+        let numberOfRows = 1;
+        let addCource = document.querySelector('.add-course');
+        let ansInput;
+        let options;
+        let gpa = document.querySelector('.calculate-gpa');
+        let deleteCourse = document.querySelector('.delete-course');
+
+        let gradeArr = [];
+        let creditArr = [];
+
+        deleteCourse.addEventListener('click', () => {
+            if (numberOfRows > 1) {
+                numberOfRows--;
+
+                deleteRow();
+            }
+        })
+
+        function deleteRow() {
+
+            creditArr = [];
+            gradeArr = [];
+            let cred = document.querySelectorAll('.ans-input');
+            let opt = document.querySelectorAll('.options');
+
+            for (let i = 0; i <= numberOfRows; i++) {
+                creditArr.push(cred[i].value);
+                gradeArr.push(opt[i].value);
+            }
+            table.innerHTML = temp;
+
+            let str = "";
+            for (let i = 2; i <= numberOfRows; i++) {
+                str += `<tr>
+                <td>Course ${i}</td>
+                <td><input type="text" placeholder="Course Name"class="input"></td>
+                <td><input type="number" class="ans-input"  min="0" step="0.5" minlength="50%" ></td>
+                <td><select id="selectOption" class=" options" >
+                    <option >O</option>
+                    <option >A+</option>
+                    <option >A</option>
+                    <option >B+</option>
+                    <option >B</option>
+                    <option >C</option>
+                    <option >R</option>
+                 
+                </select></td>
+            </tr>`
+            }
+            let appends = table.innerHTML + str;
+            table.innerHTML = appends;
+            cred = document.querySelectorAll('.ans-input');
+            opt = document.querySelectorAll('.options')
+            cred.forEach((c, index) => {
+                c.value = creditArr[index];
+                opt[index].value = gradeArr[index];
+            })
+
+        }
+
+        addCource.addEventListener('click', () => {
+            numberOfRows++;
+            addRow();
+
+
+        })
+
+        function addRow() {
+            creditArr = [];
+            gradeArr = [];
+            let cred = document.querySelectorAll('.ans-input');
+            let opt = document.querySelectorAll('.options');
+
+            cred.forEach((c, index) => {
+                creditArr.push(c.value);
+                gradeArr.push(opt[index].value);
+            })
+            console.log(creditArr)
+            let str = `<tr>
+                <td>Course ${numberOfRows}</td>
+                <td><input type="text" placeholder="Course Name"class="input"></td>
+                <td><input type="number" class="ans-input"  min="0" step="0.5" minlength="50%"></td>
+                <td><select id="selectOption" class=" options" >
+                    <option >O</option>
+                    <option >A+</option>
+                    <option >A</option>
+                    <option >B+</option>
+                    <option >B</option>
+                    <option >C</option>
+                    <option >R</option>
+                 
+                </select></td>
+            </tr>`;
+
+            let check = table.innerHTML + str;
+            table.innerHTML = check;
+            cred = document.querySelectorAll('.ans-input');
+            opt = document.querySelectorAll('.options')
+            creditArr.forEach((c, index) => {
+                cred[index].value = c;
+                opt[index].value = gradeArr[index]
+            })
+
+        }
+
+
+        gpa.addEventListener('click', () => {
+            options = document.querySelectorAll('.options');
+            ansInput = document.querySelectorAll('.ans-input');
+            calculateGPA();
+        })
+
+        function calculateGPA() {
+            console.log(isCorrect())
+            if (isCorrect()) {
+
+            } else {
+                alert('You Must Fill All The Sections');
+                return;
+            }
+            let cred = document.querySelectorAll('.ans-input');
+            let opt = document.querySelectorAll('.options')
+            let calculateButton = document.querySelector('.calculate-gpa');
+            let totalCredit = 0;
+            let totalGrade = 0;
+            cred.forEach((c, index) => {
+
+
+
+                let tempC = Number(c.value);
+                totalGrade += tempC;
+                let tempG = 0;
+                switch (opt[index].value) {
+                    case 'O':
+
+                        tempC *= 10;
+                        break;
+                    case "A+":
+
+                        tempC *= 9;
+                        break;
+                    case "A":
+
+                        tempC *= 8;
+                        break;
+                    case "B+":
+
+                        tempC *= 7;
+                        break;
+                    case "B":
+
+                        tempC *= 6;
+                        break;
+                    case "C":
+
+                        tempC *= 5;
+                        break;
+                    case "R":
+
+                        tempC *= 0;
+                        break;
+                    default:
+
+                        tempC *= 0;
+                }
+
+                totalCredit += tempC;
+
+
+            })
+            finalResult.innerHTML = totalCredit / totalGrade;
+
+
+
+        }
+
+        function isCorrect() {
+            let bool = true;
+            ansInput.forEach((credit, index) => {
+                if (credit.value == "" || credit.value == null) {
+                    bool = false;
+                }
+            })
+            return bool;
+        }
+
+
+
+    </script>
+
+    <script src="cgpa.js">
+
+    </script>
+
+</body>
+
+</html>
